@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
+from django.core.mail import send_mail
 
 from .models import Post
 from .forms import EmailPostForm
@@ -9,6 +10,8 @@ from .forms import EmailPostForm
 def post_share(request, post_id):
     # retrieve post by id and its status must be published
     post = get_object_or_404(Post, id=post_id, status='published')
+    sent = False
+
     if request.method == 'POST':
         # form was submitted and needs to be processed
         form = EmailPostForm(request.POST)
@@ -16,9 +19,15 @@ def post_share(request, post_id):
             # form field passes validation
             cd = form.cleaned_data
             # sends email
+            post_url = request.build_absolute_uri(post.get_absolute_url())
+            subject = f"{cd['name']} recommends you read {post.title}"
+            message = f"Read {post.title} at {post_url}\n\n" \
+                      f"{cd['name']}\'s comments: {cd['comments']}"
+            send_mail(subject, message, 'kydzoster@gmail.com', [cd['to']])
+            sent = True
     else:
         form = EmailPostForm()
-    return render(request, 'blog/post/share.html', {'post': post, 'form': form})
+    return render(request, 'blog/post/share.html', {'post': post, 'form': form, 'sent': sent})
 
 
 def post_list(request):
