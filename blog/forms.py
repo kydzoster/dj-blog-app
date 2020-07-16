@@ -1,5 +1,4 @@
 from django import forms
-from .models import Comment
 
 
 class EmailPostForm(forms.Form):
