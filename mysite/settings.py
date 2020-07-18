@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     # custom
     'blog.apps.BlogConfig',
+    'taggit', # tags for comments
 ]
 
 MIDDLEWARE = [
