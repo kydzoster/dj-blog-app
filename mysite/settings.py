@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SITE_ID = 1 # associated with sites and sitemaps
 
 # Application definition
 
@@ -41,6 +42,8 @@ INSTALLED_APPS = [
     # custom
     'blog.apps.BlogConfig',
     'taggit', # tags for comments
+    'django.contrib.sites', # allows to associate objects to particular websites, very good when multiple sites are running from single django project
+    'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [
